@@ -7,6 +7,7 @@
 - ​**商品管理**：完整的CRUD操作
 
 ## 使用方法
+- 注意开通云服务需使用支付宝，如果开通阿里云的无法导出生成下载地址
 - 导入uni-id-pages,具体操作参考官网 https://doc.dcloud.net.cn/uniCloud/uni-id/summary.html
 - 在文件 manifest.json 添加微信appid
 
