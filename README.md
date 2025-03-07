@@ -7,19 +7,6 @@
 - ​**商品管理**：完整的CRUD操作
 
 ## 使用方法
-- 在文件\uni_modules\uni-config-center\uniCloud\cloudfunctions\common\uni-config-center\uni-id，添加appid,appsecret
-  ```vue
-  "mp-weixin": {
-    "tokenExpiresIn": 2592000,
-    "tokenExpiresThreshold": 864000,
-    "oauth": {
-       
-      "weixin": {
-        "appid": "你的微信appid",
-        "appsecret": "你的微信密钥"
-      }
-    }
-  },
-  ```
+- 导入uni-id-pages,具体操作参考官网 https://doc.dcloud.net.cn/uniCloud/uni-id/summary.html
 - 在文件 manifest.json 添加微信appid
 
