@@ -1,0 +1,15 @@
+{
+    "version" : "1.0",
+    "configurations" : [
+        {
+            "default" : {
+                "launchtype" : "local"
+            },
+            "mp-weixin" : {
+                "launchtype" : "remote"
+            },
+            "provider" : "alipay",
+            "type" : "uniCloud"
+        }
+    ]
+}

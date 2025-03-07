@@ -1,0 +1,1 @@
+"use strict";const t={data:()=>({}),created(){this.popup=this.getParent()},methods:{getParent(t="uniPopup"){let e=this.$parent,p=e.$options.name;for(;p!==t;){if(e=e.$parent,!e)return!1;p=e.$options.name}return e}}};exports.popup=t;

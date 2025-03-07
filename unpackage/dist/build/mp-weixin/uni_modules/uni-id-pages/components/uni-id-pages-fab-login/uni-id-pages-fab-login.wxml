@@ -1,0 +1,1 @@
+<view><view class="fab-login-box"><view wx:for="{{a}}" wx:for-item="item" wx:key="c" class="item" bindtap="{{item.d}}"><image class="logo" src="{{item.a}}" mode="scaleToFill"></image><text class="login-title">{{item.b}}</text></view></view></view>
