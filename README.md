@@ -11,3 +11,6 @@
 - 导入uni-id-pages,具体操作参考官网 https://doc.dcloud.net.cn/uniCloud/uni-id/summary.html
 - 在文件 manifest.json 添加微信appid
 
+## 小程序体验入口
+- 名称：我的物品录
+- ![gh_401c931e7c59_258](https://github.com/user-attachments/assets/3e00847d-66b3-4bdd-9985-ad49cd3137c9)
