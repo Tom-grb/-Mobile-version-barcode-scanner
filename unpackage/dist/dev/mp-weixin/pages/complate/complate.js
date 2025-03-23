@@ -1,6 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const uni_modules_uniIdPages_common_store = require("../../uni_modules/uni-id-pages/common/store.js");
+require("../../uni_modules/uni-id-pages/common/store.js");
 const common_assets = require("../../common/assets.js");
 const goodsInfoObj = common_vendor.er.importObject("goodsInfoObj");
 const _sfc_main = {
@@ -19,21 +19,8 @@ const _sfc_main = {
     }
   },
   methods: {
-    checkLogin() {
-      if (!uni_modules_uniIdPages_common_store.store.hasLogin) {
-        common_vendor.index.navigateTo({
-          url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
-        });
-        return false;
-      }
-      return true;
-    },
     // 添加限流处理方法
     handleScanWithThrottle(e) {
-      if (!this.checkLogin()) {
-        return;
-      }
-      common_vendor.index.__f__("log", "at pages/complate/complate.vue:120", "扫码结果：", e.detail.result);
       const currentTime = Date.now();
       if (this.scanning) {
         return;
@@ -41,7 +28,6 @@ const _sfc_main = {
       if (currentTime - this.lastScanTime < 2e3) {
         return;
       }
-      common_vendor.index.__f__("log", "at pages/complate/complate.vue:129", "整备调用");
       this.lastScanTime = currentTime;
       this.handleScan(e);
     },
@@ -51,7 +37,7 @@ const _sfc_main = {
       this.scanning = true;
       try {
         const code = e.detail.result;
-        common_vendor.index.__f__("log", "at pages/complate/complate.vue:143", "handleScan", code);
+        common_vendor.index.__f__("log", "at pages/complate/complate.vue:111", "handleScan", code);
         const existingItem = this.goodsList.find((item) => item.goods_sn === code);
         if (existingItem) {
           const index = this.goodsList.indexOf(existingItem);
@@ -70,6 +56,12 @@ const _sfc_main = {
           setTimeout(() => {
             this.goodsList[0].isNew = false;
           }, 500);
+        } else if (res.code === -1) {
+          setTimeout(() => {
+            common_vendor.index.navigateTo({
+              url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
+            });
+          }, 1e3);
         } else {
           common_vendor.index.showToast({
             title: "商品不存在",

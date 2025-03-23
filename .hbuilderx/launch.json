@@ -6,7 +6,7 @@
                 "launchtype" : "local"
             },
             "mp-weixin" : {
-                "launchtype" : "remote"
+                "launchtype" : "local"
             },
             "provider" : "alipay",
             "type" : "uniCloud"

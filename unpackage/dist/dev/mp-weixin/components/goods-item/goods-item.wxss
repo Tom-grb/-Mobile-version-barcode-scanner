@@ -1,0 +1,38 @@
+
+.goodsBox.data-v-ce82559b{
+		padding: 25rpx;
+		border-radius: 8rpx;
+		background: #fff;
+}
+.goods-item.data-v-ce82559b:active {
+		transform: scale(0.98);
+}
+.goods-info.data-v-ce82559b {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 16rpx;
+}
+.goods-name.data-v-ce82559b {
+		font-size: 32rpx;
+		color: #333;
+		font-weight: 500;
+}
+.goods-price.data-v-ce82559b {
+		font-size: 32rpx;
+		color: #ff3b30;
+		font-weight: 500;
+}
+.goods-meta.data-v-ce82559b {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+}
+.goods-code.data-v-ce82559b {
+		font-size: 24rpx;
+		color: #666;
+}
+.goods-time.data-v-ce82559b {
+		font-size: 24rpx;
+		color: #999;
+}

@@ -1,7 +1,7 @@
 const uniID = require('uni-id-common')
 
 module.exports = {
-	_before: async function () { // 通用预处理器
+	_before: async function() { // 通用预处理器
 		this.uniID = uniID.createInstance({
 			clientInfo: this.getClientInfo()
 		})
@@ -12,6 +12,15 @@ module.exports = {
 		const dbObj = uniCloud.databaseForJQL({
 			clientInfo: this.getClientInfo()
 		})
+		const token = this.getUniIdToken()
+		const payload = await this.uniID.checkToken(token)
+		if (!payload.uid) {
+			return {
+				code: -1,
+				msg: '用户未登录'
+			}
+		}
+		
 		// console.log(params)
 		return await dbObj.collection('goods-info').add(params)
 	},
@@ -57,6 +66,14 @@ module.exports = {
 		const dbObj = uniCloud.databaseForJQL({
 			clientInfo: this.getClientInfo()
 		})
+		const token = this.getUniIdToken()
+		const payload = await this.uniID.checkToken(token)
+		if (!payload.uid) {
+			return {
+				code: -1,
+				msg: '用户未登录'
+			}
+		}
 
 		return await dbObj.collection('goods-info').doc(params._id).remove()
 	},
@@ -65,6 +82,16 @@ module.exports = {
 		const dbObj = uniCloud.databaseForJQL({
 			clientInfo: this.getClientInfo()
 		})
+		
+		const token = this.getUniIdToken()
+		const payload = await this.uniID.checkToken(token)
+		if (!payload.uid) {
+			return {
+				code: -1,
+				msg: '用户未登录'
+			}
+		}
+		
 		// 检查goods_price是否合法
 		if (isNaN(params.goods_price)) {
 			return {
@@ -72,7 +99,7 @@ module.exports = {
 				msg: '商品价格不合法'
 			}
 		}
-		
+
 		const id = params._id
 		delete params._id
 		const tempGoodsInfo = {
@@ -97,7 +124,11 @@ module.exports = {
 			}
 		}
 
-		const { keyword, page = 1, pageSize = 10 } = params
+		const {
+			keyword,
+			page = 1,
+			pageSize = 10
+		} = params
 		const skipAmount = (page - 1) * pageSize
 
 		try {
@@ -121,6 +152,49 @@ module.exports = {
 				code: -2,
 				msg: err.message
 			}
+		}
+	},
+
+	// 获取商品
+	async getGoodsList({
+		page = 1,
+		pageSize = 20
+	}) {
+		const dbObj = uniCloud.databaseForJQL({
+			clientInfo: this.getClientInfo()
+		});
+
+		const token = this.getUniIdToken();
+		const payload = await this.uniID.checkToken(token);
+		if (!payload.uid) {
+			return {
+				code: -1,
+				msg: '用户未登录'
+			};
+		}
+		try {
+			// 查询商品信息，同时验证用户ID和商品编号
+			const goodsInfo = await dbObj.collection('goods-info')
+				.where({
+					user_id: payload.uid,
+				})
+				.skip((page - 1) * pageSize)
+				.limit(pageSize)
+				.orderBy('last_modify_date', 'desc')
+				.get();
+
+			return {
+				code: 0,
+				msg: '获取成功',
+				data: goodsInfo.data
+			};
+		} catch (error) {
+			console.error('获取商品列表失败:', error);
+			return {
+				code: -2,
+				msg: '获取商品列表失败',
+				error: error.message
+			};
 		}
 	}
 }

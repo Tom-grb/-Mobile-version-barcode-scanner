@@ -25,6 +25,12 @@
 						placeholder="请输入商品价格" />
 					<text v-else class="value">￥{{goods.goods_price}}</text>
 				</view>
+				
+				<view class="form-item">
+					<text class="label">商品数量</text>
+					<input v-if="isEditing" v-model="localGoods.goods_num" class="input" type="digit" placeholder="请输入商品数量" />
+					<text v-else class="value">{{goods.goods_num || '暂无数量'}}</text>
+				</view>
 
 				<view class="form-item">
 					<text class="label">商品备注</text>
@@ -75,6 +81,12 @@
 			}
 		},
 		methods: {
+			gotoLogin(){
+				uni.navigateTo({
+					url: '/uni_modules/uni-id-pages/pages/login/login-withoutpwd'
+				})
+			},
+			
 			cancel() {
 				this.isEditing = false
 				this.$emit('update:show', false)
@@ -89,7 +101,7 @@
 			async handleConfirm() {
 				try {
 					this.localGoods.goods_price = parseFloat(this.localGoods.goods_price)
-					console.log('this.localGoods.goods_price', this.localGoods.goods_price)
+					this.localGoods.goods_num = parseFloat(this.localGoods.goods_num)
 					if (isNaN(this.localGoods.goods_price) || this.localGoods.goods_price < 0) {
 						uni.showToast({
 							title: '价格要求为数字且大于0',
@@ -97,8 +109,25 @@
 						});
 						return
 					}
+					if (isNaN(this.localGoods.goods_num) || this.localGoods.goods_num < 0) {
+						uni.showToast({
+							title: '数量要求为数字且大于0',
+							icon: 'none'
+						});
+						return
+					}
 
-					await goodsInfoObj.updateGoods(this.localGoods)
+					const res = await goodsInfoObj.updateGoods(this.localGoods)
+					if(res.code===-1){
+						uni.showToast({
+							title: '未登录/登录过期',
+							icon:'none'
+						})
+						setTimeout(()=>{
+							this.gotoLogin()
+						},1000)
+						return
+					}
 					this.isEditing = false
 					this.$emit('refresh')
 
@@ -116,9 +145,19 @@
 					success: async (res) => {
 						if (res.confirm) {
 							try {
-								await goodsInfoObj.removeGoods({
+								const rescode = await goodsInfoObj.removeGoods({
 									_id: this.goods._id
 								})
+								if(rescode.code===-1){
+									uni.showToast({
+										title: '未登录/登录过期',
+										icon:'none'
+									})
+									setTimeout(()=>{
+										this.gotoLogin()
+									},1000)
+									return
+								}
 								uni.showToast({
 									title: '删除成功',
 									icon: 'success'
@@ -162,7 +201,7 @@
 	}
 
 	.popup-header {
-		padding: 32rpx;
+		padding: 0 24rpx;
 		border-bottom: 2rpx solid #eee;
 		display: flex;
 		justify-content: space-between;
@@ -182,17 +221,18 @@
 	}
 
 	.popup-body {
-		padding: 24rpx 24rpx 0;
+		padding: 24rpx 24rpx;
 	}
 
 	.form-item {
-		margin-bottom: 32rpx;
+		margin-bottom: 10rpx;
 	}
+	
 
 	.label {
 		font-size: 28rpx;
 		color: #666;
-		margin-bottom: 16rpx;
+		margin-bottom: 7rpx;
 		display: block;
 	}
 
@@ -203,6 +243,7 @@
 		padding: 0 24rpx;
 		font-size: 32rpx;
 		transition: all 0.3s;
+		height: 70rpx;
 	}
 
 	.input:focus {

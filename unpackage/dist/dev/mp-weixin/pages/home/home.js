@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const uni_modules_uniIdPages_common_store = require("../../uni_modules/uni-id-pages/common/store.js");
 const goodsInfoObj = common_vendor.er.importObject("goodsInfoObj");
 const _sfc_main = {
   data() {
@@ -11,13 +10,14 @@ const _sfc_main = {
         goods_name: "",
         goods_price: "",
         goods_notes: "",
-        goods_sn: ""
+        goods_sn: "",
+        goods_num: ""
       }
     };
   },
   methods: {
     onShareAppMessage(res) {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:70", res);
+      common_vendor.index.__f__("log", "at pages/home/home.vue:71", res);
       if (res.from === "menu") {
         return {
           title: "我的物品录",
@@ -32,36 +32,27 @@ const _sfc_main = {
         imageUrl: "https://env-00jxt6l7w3we.normal.cloudstatic.cn/showPic/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-02%20170114.png"
       };
     },
-    checkLogin() {
-      if (!uni_modules_uniIdPages_common_store.store.hasLogin) {
-        common_vendor.index.navigateTo({
-          url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
-        });
-        return false;
-      }
-      return true;
+    gotoLogin() {
+      common_vendor.index.navigateTo({
+        url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
+      });
     },
     goToSearch() {
-      if (!this.checkLogin())
-        return;
       common_vendor.index.navigateTo({
         url: "/pages/home/search"
       });
     },
     popopen() {
-      if (!this.checkLogin())
-        return;
       this.$refs.addPopup.open();
       this.newGoods = {
         goods_name: "",
         goods_price: "",
         goods_notes: "",
-        goods_sn: ""
+        goods_sn: "",
+        goods_num: ""
       };
     },
     async startScan() {
-      if (!this.checkLogin())
-        return;
       try {
         const res = await common_vendor.index.scanCode({
           scanType: ["barCode", "qrCode"]
@@ -80,6 +71,15 @@ const _sfc_main = {
         if (res.code === 0) {
           this.currentGoods = res.data;
           this.showGoodsPopup = true;
+        } else if (res.code === -1) {
+          common_vendor.index.showToast({
+            title: "未登录/登录过期",
+            icon: "none"
+          });
+          setTimeout(() => {
+            this.gotoLogin();
+          }, 1e3);
+          return;
         } else {
           this.newGoods.goods_sn = code;
           common_vendor.index.showModal({
@@ -102,7 +102,6 @@ const _sfc_main = {
     async confirmAdd() {
       try {
         this.newGoods.goods_price = parseFloat(this.newGoods.goods_price);
-        common_vendor.index.__f__("log", "at pages/home/home.vue:159", "this.newGoods.goods_price", this.newGoods.goods_price);
         if (isNaN(this.newGoods.goods_price) || this.newGoods.goods_price < 0) {
           common_vendor.index.showToast({
             title: "价格要求为数字且大于0",
@@ -111,17 +110,28 @@ const _sfc_main = {
           return;
         }
         const res = await goodsInfoObj.addGoods(this.newGoods);
-        common_vendor.index.__f__("log", "at pages/home/home.vue:168", res);
-        common_vendor.index.showToast({
-          title: "添加成功",
-          icon: "success"
-        });
+        if (res.code === -1) {
+          common_vendor.index.showToast({
+            title: "未登录/登录过期",
+            icon: "none"
+          });
+          setTimeout(() => {
+            this.gotoLogin();
+          }, 1e3);
+          return;
+        } else {
+          common_vendor.index.showToast({
+            title: "添加成功",
+            icon: "success"
+          });
+        }
         this.$refs.addPopup.close();
         this.newGoods = {
           goods_name: "",
           goods_price: "",
           goods_notes: "",
-          goods_sn: ""
+          goods_sn: "",
+          goods_num: ""
         };
       } catch (e) {
         common_vendor.index.showToast({
@@ -136,7 +146,8 @@ const _sfc_main = {
         goods_name: "",
         goods_price: "",
         goods_notes: "",
-        goods_sn: ""
+        goods_sn: "",
+        goods_num: ""
       };
     },
     refreshGoods() {
@@ -172,11 +183,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     k: common_vendor.o(($event) => $data.newGoods.goods_name = $event.detail.value),
     l: $data.newGoods.goods_price,
     m: common_vendor.o(($event) => $data.newGoods.goods_price = $event.detail.value),
-    n: $data.newGoods.goods_notes,
-    o: common_vendor.o(($event) => $data.newGoods.goods_notes = $event.detail.value),
-    p: common_vendor.o((...args) => $options.confirmAdd && $options.confirmAdd(...args)),
-    q: common_vendor.sr("addPopup", "5b43d928-1"),
-    r: common_vendor.p({
+    n: $data.newGoods.goods_num,
+    o: common_vendor.o(($event) => $data.newGoods.goods_num = $event.detail.value),
+    p: $data.newGoods.goods_notes,
+    q: common_vendor.o(($event) => $data.newGoods.goods_notes = $event.detail.value),
+    r: common_vendor.o((...args) => $options.confirmAdd && $options.confirmAdd(...args)),
+    s: common_vendor.sr("addPopup", "5b43d928-1"),
+    t: common_vendor.p({
       type: "center"
     })
   };

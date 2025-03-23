@@ -14,14 +14,7 @@
 		<!-- 搜索结果列表 -->
 		<scroll-view class="search-results" scroll-y @scrolltolower="loadMore" v-if="goodsList.length > 0">
 			<view class="goods-item" v-for="item in goodsList" :key="item._id" @click="showGoodsDetail(item)">
-				<view class="goods-info">
-					<text class="goods-name">{{item.goods_name}}</text>
-					<text class="goods-price">￥{{item.goods_price}}</text>
-				</view>
-				<view class="goods-meta">
-					<text class="goods-code">编码：{{item.goods_sn}}</text>
-					<text class="goods-time">{{formatMillisecondsToDate(item.last_modify_date)}}</text>
-				</view>
+				<goods-item :item="item"></goods-item>
 			</view>
 
 			<!-- 加载更多 -->
@@ -37,16 +30,15 @@
 		<view class="empty-result" v-else-if="searched">
 			<text class="empty-text">未找到相关商品</text>
 		</view>
-
+		
 		<!-- 商品详情弹窗 -->
 		<goods-popup :show="showPopup" :goods="currentGoods" @update:show="showPopup = $event" @refresh="refreshList" />
+		
 	</view>
 </template>
 
 <script>
-	import {
-		formatMillisecondsToDate
-	} from '../../utils/tool.js'
+
 
 	const goodsInfoObj = uniCloud.importObject('goodsInfoObj')
 
@@ -64,7 +56,6 @@
 			}
 		},
 		methods: {
-			formatMillisecondsToDate,
 			goBack() {
 				uni.navigateBack()
 			},
@@ -94,6 +85,18 @@
 						page: this.page,
 						pageSize: this.pageSize
 					})
+					if(res.code===-1){
+						uni.showToast({
+							title: '未登录/登录过期',
+							icon:'none'
+						})
+						setTimeout(()=>{
+							uni.navigateTo({
+								url: '/uni_modules/uni-id-pages/pages/login/login-withoutpwd'
+							})
+						},1000)
+						return
+					}
 
 					if (this.page === 1) {
 						this.goodsList = res.data
@@ -180,55 +183,7 @@
 	.search-results {
 		height: calc(100vh - 112rpx);
 		padding: 20rpx;
-	}
-
-	.goods-item {
-		background: #fff;
-		width: 88%;
-		border-radius: 16rpx;
-		padding: 24rpx;
-		margin-bottom: 20rpx;
-		box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
-		transition: all 0.3s;
-	}
-
-	.goods-item:active {
-		transform: scale(0.98);
-	}
-
-	.goods-info {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 16rpx;
-	}
-
-	.goods-name {
-		font-size: 32rpx;
-		color: #333;
-		font-weight: 500;
-	}
-
-	.goods-price {
-		font-size: 32rpx;
-		color: #ff3b30;
-		font-weight: 500;
-	}
-
-	.goods-meta {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.goods-code {
-		font-size: 24rpx;
-		color: #666;
-	}
-
-	.goods-time {
-		font-size: 24rpx;
-		color: #999;
+		box-sizing: border-box;
 	}
 
 	.load-more,
@@ -265,6 +220,7 @@
 	/* 添加动画效果 */
 	.goods-item {
 		animation: slideIn 0.3s ease-out;
+		margin-bottom: 17rpx;
 	}
 
 	@keyframes slideIn {

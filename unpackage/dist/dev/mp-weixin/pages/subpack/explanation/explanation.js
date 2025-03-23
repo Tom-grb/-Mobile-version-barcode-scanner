@@ -3,8 +3,7 @@ const common_vendor = require("../../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
-      // 图片链接，可替换为实际链接
-      imageUrl: "https://env-00jxt6l7w3we.normal.cloudstatic.cn/model/ExplanationPic.png",
+      imageUrl: "https://env-00jxt6l7w3we.normal.cloudstatic.cn/showPic/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-21%20203123.png",
       tableBody: [
         {
           name: "商品条形码 (选填)",
@@ -22,6 +21,11 @@ const _sfc_main = {
           isBold: true
         },
         {
+          name: "商品数量 (选填，填数字且大于等于零)",
+          desc: "记录商品的数量。",
+          isBold: true
+        },
+        {
           name: "商品备注 (选填)",
           desc: "可填写关于商品的额外信息，如商品的特性、使用说明、注意事项等补充内容。",
           isBold: true
@@ -32,7 +36,7 @@ const _sfc_main = {
   methods: {
     copyText() {
       common_vendor.index.setClipboardData({
-        data: "https://env-00jxt6l7w3we.normal.cloudstatic.cn/model/ImportModel.xlsx",
+        data: "https://env-00jxt6l7w3we.normal.cloudstatic.cn/model/ImportModel2.xlsx",
         success() {
           common_vendor.index.showToast({
             title: "复制成功",
@@ -44,7 +48,7 @@ const _sfc_main = {
             title: "复制失败",
             icon: "none"
           });
-          common_vendor.index.__f__("error", "at pages/subpack/explanation/explanation.vue:90", "复制失败", err);
+          common_vendor.index.__f__("error", "at pages/subpack/explanation/explanation.vue:94", "复制失败", err);
         }
       });
     }

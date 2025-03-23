@@ -9,10 +9,38 @@ module.exports = {
 		})
 
 	},
+	async checkLogin(){
+		const dbObj = uniCloud.databaseForJQL({
+			clientInfo: this.getClientInfo()
+		})
+		
+		const token = this.getUniIdToken();
+		const payload = await this.uniID.checkToken(token);
+		if (!payload.uid) {
+		    return {
+		        code: -1,
+		        msg: '用户未登录'
+		    };
+		}else{
+			return {
+				code:200
+			}
+		}
+	},
+	
 	async exportGoods() {
 		const dbObj = uniCloud.databaseForJQL({
 			clientInfo: this.getClientInfo()
 		})
+		
+		const token = this.getUniIdToken();
+		const payload = await this.uniID.checkToken(token);
+		if (!payload.uid) {
+		    return {
+		        code: -1,
+		        msg: '用户未登录'
+		    };
+		}
 
 
 		try {
@@ -31,7 +59,7 @@ module.exports = {
 			const workbook = new ExcelJS.Workbook();
 			const worksheet = workbook.addWorksheet('Goods');
 			// 添加表头
-			worksheet.addRow(['商品条形码', '商品名称', '商品价格', '商品备注', '修改时间'])
+			worksheet.addRow(['商品条形码', '商品名称', '商品价格', '商品数量','商品备注', '修改时间'])
 
 			// 添加数据行
 			allData.forEach(goods => {
@@ -44,6 +72,7 @@ module.exports = {
 					goods.goods_sn,
 					goods.goods_name,
 					goods.goods_price,
+					goods.goods_num,
 					goods.goods_notes,
 					formatTime
 				]);
@@ -66,6 +95,7 @@ module.exports = {
 				downloadUrl: downloadURL.fileList[0].tempFileURL
 			};
 		} catch (e) {
+			console.log(e)
 			return {
 				code: 500,
 				message: '数据导出失败',
@@ -95,8 +125,10 @@ module.exports = {
 	                goods_sn: item[0] ? String(item[0]) : "",
 	                goods_name: String(item[1]),
 	                goods_price: Number(item[2]),
-	                goods_notes: item[3] ? String(item[3]) : ""
+					goods_num: item[3]?Number(item[3]):"",
+	                goods_notes: item[4] ? String(item[4]) : ""
 	            };
+				
 	
 	            // 检查数据是否存在，使用当前 item 生成查询条件
 	            const queryCondition = item[0]
@@ -118,7 +150,7 @@ module.exports = {
 	              .catch(error => {
 	                    console.error('处理商品信息时出错:', error);
 	                    // 可以选择返回一个错误对象，或者其他处理方式
-	                    return { error: '处理商品信息时出错' };
+	                    return { error: error };
 	                });
 	        });
 	

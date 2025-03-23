@@ -135,5 +135,4 @@ const mutations = {
 };
 const store = common_vendor.reactive(data);
 exports.mutations = mutations;
-exports.store = store;
 //# sourceMappingURL=../../../../.sourcemap/mp-weixin/uni_modules/uni-id-pages/common/store.js.map

@@ -5,7 +5,10 @@
     "pages/complate/complate",
     "pages/my/my",
     "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
-    "uni_modules/uni-id-pages/pages/common/webview/webview"
+    "uni_modules/uni-id-pages/pages/common/webview/webview",
+    "pages/list/list",
+    "uni_modules/uni-id-pages/pages/common/PrivacyPolicy/PrivacyPolicy",
+    "uni_modules/uni-id-pages/pages/common/UserAgreement/UserAgreement"
   ],
   "subPackages": [
     {
@@ -36,6 +39,12 @@
         "pagePath": "pages/complate/complate",
         "iconPath": "static/tabBar/checkout.png",
         "selectedIconPath": "static/tabBar/checkout-active.png"
+      },
+      {
+        "text": "商品",
+        "pagePath": "pages/list/list",
+        "iconPath": "static/tabBar/data.png",
+        "selectedIconPath": "/static/tabBar/data-active.png"
       },
       {
         "text": "我的",

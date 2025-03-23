@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "商品",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "goods-item": "../../components/goods-item/goods-item",
+    "goods-popup": "../../components/goods-popup/goods-popup"
+  }
+}

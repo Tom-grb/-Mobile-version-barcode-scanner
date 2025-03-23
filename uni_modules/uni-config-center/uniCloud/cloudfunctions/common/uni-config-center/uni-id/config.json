@@ -10,7 +10,7 @@
   "tokenSecret": "100zjx@#$",  
   "requestAuthSecret": "100zjx@#$",  
   "tokenExpiresIn": 2592000,  
-  "tokenExpiresThreshold": 3600,  
+  "tokenExpiresThreshold": 1296000,  
   "maxTokenLength": 10,  
   "passwordErrorLimit": 6,  
   "passwordErrorRetryTime": 3600,  
@@ -23,7 +23,7 @@
   "userRegisterDefaultRole": [],  
   "app": {  
     "tokenExpiresIn": 2592000,
-    "tokenExpiresThreshold": 864000,
+    "tokenExpiresThreshold": 1296000,
     "oauth": {
        
       "weixin": {
@@ -45,8 +45,8 @@
     }
   },
   "web": {  
-    "tokenExpiresIn": 7200,
-    "tokenExpiresThreshold": 3600,
+    "tokenExpiresIn": 2592000,
+    "tokenExpiresThreshold": 1296000,
     "oauth": {
       "weixin-h5": {  
         "appid": "",
@@ -60,18 +60,18 @@
   },
   "mp-weixin": {
     "tokenExpiresIn": 2592000,
-    "tokenExpiresThreshold": 864000,
+    "tokenExpiresThreshold": 1296000,
     "oauth": {
        
       "weixin": {
-        "appid": "",
-        "appsecret": ""
+        "appid": "wxda46dcadca07d370",
+        "appsecret": "0be598e1e2b57a4c4f265deb7e2b5550"
       }
     }
   },
   "mp-qq": {
-    "tokenExpiresIn": 259200,
-    "tokenExpiresThreshold": 86400,
+    "tokenExpiresIn": 2592000,
+    "tokenExpiresThreshold": 1296000,
     "oauth": {
        
       "qq": {
@@ -81,8 +81,8 @@
     }
   },
   "mp-alipay": {
-    "tokenExpiresIn": 259200,
-    "tokenExpiresThreshold": 86400,
+    "tokenExpiresIn": 25920000,
+    "tokenExpiresThreshold": 1296000,
     "oauth": {
        
       "alipay": {

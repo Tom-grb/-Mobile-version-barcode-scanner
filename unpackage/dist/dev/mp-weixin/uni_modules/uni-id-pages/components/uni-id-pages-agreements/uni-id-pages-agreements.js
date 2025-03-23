@@ -49,7 +49,7 @@ const _sfc_main = {
       title
     }) {
       common_vendor.index.navigateTo({
-        url: "/uni_modules/uni-id-pages/pages/common/webview/webview?url=" + url + "&title=" + title,
+        url,
         success: (res) => {
           common_vendor.index.__f__("log", "at uni_modules/uni-id-pages/components/uni-id-pages-agreements/uni-id-pages-agreements.vue:101", "success", res);
         },

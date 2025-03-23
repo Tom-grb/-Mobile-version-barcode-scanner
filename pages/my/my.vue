@@ -97,10 +97,6 @@
 		},
 		onLoad() {
 			this.getUserInfo()
-			console.log('onLoad')
-		},
-		onshow() {
-			this.getUserInfo()
 		},
 		methods: {
 			handleModel() {
@@ -118,31 +114,40 @@
 				}
 			},
 
+			gotoLogin() {
+				uni.showToast({
+					title: '未登录/登录过期',
+					icon: 'none'
+				})
+
+				setTimeout(() => {
+					uni.navigateTo({
+						url: '../../uni_modules/uni-id-pages/pages/login/login-withoutpwd'
+					})
+				}, 1000)
+			},
+
 			async getUserInfo() {
 				try {
 					let userInfo = uni.getStorageSync('uni-id-pages-userInfo')
 					if (this.isJSON(userInfo)) {
 						userInfo = JSON.parse(userInfo)
 					}
-
-					// console.log('获取用户信息', userInfo);
-
-					if (userInfo) {
-						this.userInfo = userInfo;
-						// console.log('有用户信息', this.userInfo);
-					} else {
-						// console.log('解析后没有用效用户信息');
-						this.handleRelogin();
-					}
+					this.userInfo = userInfo || {}
 				} catch (error) {
 					console.error('获取用户信息时发生错误:', error);
-					this.handleRelogin();
 				}
 			},
 
 
 			showNicknameInput() {
-				this.newNickname = this.userInfo.nickname || '未知昵称'
+				console.log(this.userInfo.nickname)
+				if (typeof this.userInfo.nickname === 'undefined') {
+					console.log(this.userInfo.nickname)
+					this.gotoLogin()
+					return
+				}
+				this.newNickname = this.userInfo.nickname || '未知'
 				this.$refs.nicknamePopup.open()
 			},
 
@@ -151,32 +156,11 @@
 			},
 
 
-			// 抽取重新登录逻辑为单独方法
-			handleRelogin() {
-				// 清除所有存储
-				if (uni.getStorageSync('uni_id_token')) {
-					uni.removeStorageSync('uni_id_token')
-				}
-				if (uni.getStorageSync('uni-id-pages-userInfo')) {
-					uni.removeStorageSync('uni-id-pages-userInfo')
-				}
-				if (uni.getStorageSync('uni_id_token_expired')) {
-					uni.removeStorageSync('uni_id_token_expired')
-				}
-
-				uni.showToast({
-					title: '请登录',
-					icon: 'none'
-				})
-
-				setTimeout(() => {
-					uni.redirectTo({
-						url: '../../uni_modules/uni-id-pages/pages/login/login-withoutpwd'
-					})
-				}, 1500)
-			},
-
 			changeAvatar() {
+				if (typeof this.userInfo.avatar_file === 'undefined') {
+					this.gotoLogin()
+					return
+				}
 				uni.chooseImage({
 					count: 1,
 					sizeType: ['compressed'],
@@ -198,7 +182,7 @@
 							const tempFileURL = await uniCloud.getTempFileURL({
 								fileList: [uploadRes.fileID]
 							})
-							
+
 							let avatarUrl = tempFileURL.fileList[0].tempFileURL
 
 							const questionMarkIndex = avatarUrl.indexOf('?');
@@ -292,7 +276,6 @@
 					try {
 						fileData = fs.readFileSync(filePath, 'base64');
 					} catch (error) {
-						console.error('读取文件失败:', error);
 						uni.showToast({
 							title: '读取文件失败',
 							icon: 'none',
@@ -306,15 +289,15 @@
 						type: 'base64'
 					});
 					const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-					
+
 					// 将工作表转换为 JSON 数据
 					const jsonData = XLSX.utils.sheet_to_json(worksheet, {
 						header: 1
 					});
 					jsonData.shift()
-					
+
 					console.log(jsonData)
-					
+
 					// 检查 goods_price 列是否包含非数字
 					const hasNonNumericPrice = jsonData.some(row => {
 						const price = row[2];
@@ -326,6 +309,13 @@
 						const name = row[1];
 						return !name || name.trim() === '';
 					});
+
+					const hasNum = jsonData.some(row => {
+						const num = row[3]
+						return !(num === '' || num === null || num === undefined || (typeof num ===
+							'number' && !isNaN(num) && Number(num) >= 0))
+					});
+
 
 					if (hasNonNumericPrice) {
 						uni.showToast({
@@ -341,19 +331,29 @@
 							duration: 2000
 						});
 						return;
+					} else if (hasNum) {
+						uni.showToast({
+							title: '数量列包含非数字或者负数,请修改后重新上传',
+							icon: 'none',
+							duration: 2000
+						});
+						return;
 					}
 					// console.log(hasNonNumericPrice,hasEmptyName)
-					// console.log(jsonData)
+					console.log(jsonData)
 
 					// 调用云对象处理数据
 					const res = await goodsExportImport.importGoods(jsonData);
-					console.log('返回',res)
+					console.log('返回', res)
 					if (res.code === 500) {
 						uni.showToast({
 							title: res.message,
 							icon: 'none',
 							duration: 2000
 						})
+					} else if (res.code === -1) {
+						this.gotoLogin()
+						return
 					} else {
 						uni.showToast({
 							title: res.message,
@@ -363,12 +363,7 @@
 					}
 
 				} catch (error) {
-					console.error('发生错误:', error);
-					uni.showToast({
-						title: '发生错误',
-						icon: 'none',
-						duration: 2000
-					});
+					console.log(error)
 				}
 			},
 
@@ -377,10 +372,13 @@
 			async handleExport() {
 				try {
 					const res = await goodsExportImport.exportGoods();
-					if (res.code) {
+					if (res.code === 200) {
 						this.tmpurl = res.downloadUrl
 						this.$refs.exportPopup.open()
 						this.coypContent(this.tmpurl)
+					} else if (res.code === -1) {
+						this.gotoLogin()
+						return
 					} else {
 						uni.showToast({
 							title: '导出失败',
@@ -417,7 +415,13 @@
 				this.$refs.exportPopup.close()
 			},
 
-			showFeedback() {
+			async showFeedback() {
+				const res = await goodsExportImport.checkLogin()
+				console.log(res.code)
+				if (res.code === -1) {
+					this.gotoLogin()
+					return
+				}
 				this.$refs.feedbackPopup.open()
 			},
 			closeFeedbackPopup() {

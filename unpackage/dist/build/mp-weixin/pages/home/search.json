@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "搜索",
   "usingComponents": {
+    "goods-item": "../../components/goods-item/goods-item",
     "goods-popup": "../../components/goods-popup/goods-popup"
   }
 }

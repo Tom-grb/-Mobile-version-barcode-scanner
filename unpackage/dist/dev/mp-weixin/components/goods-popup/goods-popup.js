@@ -28,6 +28,11 @@ const _sfc_main = {
     }
   },
   methods: {
+    gotoLogin() {
+      common_vendor.index.navigateTo({
+        url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
+      });
+    },
     cancel() {
       this.isEditing = false;
       this.$emit("update:show", false);
@@ -42,7 +47,7 @@ const _sfc_main = {
     async handleConfirm() {
       try {
         this.localGoods.goods_price = parseFloat(this.localGoods.goods_price);
-        common_vendor.index.__f__("log", "at components/goods-popup/goods-popup.vue:92", "this.localGoods.goods_price", this.localGoods.goods_price);
+        this.localGoods.goods_num = parseFloat(this.localGoods.goods_num);
         if (isNaN(this.localGoods.goods_price) || this.localGoods.goods_price < 0) {
           common_vendor.index.showToast({
             title: "价格要求为数字且大于0",
@@ -50,7 +55,24 @@ const _sfc_main = {
           });
           return;
         }
-        await goodsInfoObj.updateGoods(this.localGoods);
+        if (isNaN(this.localGoods.goods_num) || this.localGoods.goods_num < 0) {
+          common_vendor.index.showToast({
+            title: "数量要求为数字且大于0",
+            icon: "none"
+          });
+          return;
+        }
+        const res = await goodsInfoObj.updateGoods(this.localGoods);
+        if (res.code === -1) {
+          common_vendor.index.showToast({
+            title: "未登录/登录过期",
+            icon: "none"
+          });
+          setTimeout(() => {
+            this.gotoLogin();
+          }, 1e3);
+          return;
+        }
         this.isEditing = false;
         this.$emit("refresh");
       } catch (e) {
@@ -67,9 +89,19 @@ const _sfc_main = {
         success: async (res) => {
           if (res.confirm) {
             try {
-              await goodsInfoObj.removeGoods({
+              const rescode = await goodsInfoObj.removeGoods({
                 _id: this.goods._id
               });
+              if (rescode.code === -1) {
+                common_vendor.index.showToast({
+                  title: "未登录/登录过期",
+                  icon: "none"
+                });
+                setTimeout(() => {
+                  this.gotoLogin();
+                }, 1e3);
+                return;
+              }
               common_vendor.index.showToast({
                 title: "删除成功",
                 icon: "success"
@@ -116,22 +148,29 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     o: $data.isEditing
   }, $data.isEditing ? {
-    p: $data.localGoods.goods_notes,
-    q: common_vendor.o(($event) => $data.localGoods.goods_notes = $event.detail.value)
+    p: $data.localGoods.goods_num,
+    q: common_vendor.o(($event) => $data.localGoods.goods_num = $event.detail.value)
   } : {
-    r: common_vendor.t($props.goods.goods_notes || "暂无备注")
+    r: common_vendor.t($props.goods.goods_num || "暂无数量")
   }, {
-    s: !$data.isEditing
+    s: $data.isEditing
+  }, $data.isEditing ? {
+    t: $data.localGoods.goods_notes,
+    v: common_vendor.o(($event) => $data.localGoods.goods_notes = $event.detail.value)
+  } : {
+    w: common_vendor.t($props.goods.goods_notes || "暂无备注")
+  }, {
+    x: !$data.isEditing
   }, !$data.isEditing ? {
-    t: common_vendor.o((...args) => $options.handleEdit && $options.handleEdit(...args))
+    y: common_vendor.o((...args) => $options.handleEdit && $options.handleEdit(...args))
   } : {
-    v: common_vendor.o((...args) => $options.handleConfirm && $options.handleConfirm(...args)),
-    w: common_vendor.o((...args) => $options.handleCancel && $options.handleCancel(...args))
+    z: common_vendor.o((...args) => $options.handleConfirm && $options.handleConfirm(...args)),
+    A: common_vendor.o((...args) => $options.handleCancel && $options.handleCancel(...args))
   }, {
-    x: common_vendor.o((...args) => $options.handleDelete && $options.handleDelete(...args)),
-    y: common_vendor.o(() => {
+    B: common_vendor.o((...args) => $options.handleDelete && $options.handleDelete(...args)),
+    C: common_vendor.o(() => {
     }),
-    z: common_vendor.o((...args) => $options.cancel && $options.cancel(...args))
+    D: common_vendor.o((...args) => $options.cancel && $options.cancel(...args))
   }) : {});
 }
 const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);

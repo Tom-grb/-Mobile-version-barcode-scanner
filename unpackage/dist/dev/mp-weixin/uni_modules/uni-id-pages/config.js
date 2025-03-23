@@ -21,9 +21,9 @@ const config = {
   ],
   // 政策协议
   agreements: {
-    serviceUrl: "https://env-00jxt6l7w3we-static.normal.cloudstatic.cn/loginfile/UserAgreement.html",
+    serviceUrl: "/uni_modules/uni-id-pages/pages/common/UserAgreement/UserAgreement",
     // 用户服务协议链接
-    privacyUrl: "https://env-00jxt6l7w3we-static.normal.cloudstatic.cn/loginfile/PrivacyPolicy.html",
+    privacyUrl: "/uni_modules/uni-id-pages/pages/common/PrivacyPolicy/PrivacyPolicy",
     // 隐私政策条款链接
     // 哪些场景下显示，1.注册（包括登录并注册，如：微信登录、苹果登录、短信验证码登录）、2.登录（如：用户名密码登录）
     scope: [

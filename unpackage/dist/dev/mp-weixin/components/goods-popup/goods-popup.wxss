@@ -19,7 +19,7 @@
 		animation: slideIn 0.2s ease-out;
 }
 .popup-header {
-		padding: 32rpx;
+		padding: 0 24rpx;
 		border-bottom: 2rpx solid #eee;
 		display: flex;
 		justify-content: space-between;
@@ -36,15 +36,15 @@
 		padding: 8rpx 16rpx;
 }
 .popup-body {
-		padding: 24rpx 24rpx 0;
+		padding: 24rpx 24rpx;
 }
 .form-item {
-		margin-bottom: 32rpx;
+		margin-bottom: 10rpx;
 }
 .label {
 		font-size: 28rpx;
 		color: #666;
-		margin-bottom: 16rpx;
+		margin-bottom: 7rpx;
 		display: block;
 }
 .input {
@@ -54,6 +54,7 @@
 		padding: 0 24rpx;
 		font-size: 32rpx;
 		transition: all 0.3s;
+		height: 70rpx;
 }
 .input:focus {
 		border-color: #007aff;

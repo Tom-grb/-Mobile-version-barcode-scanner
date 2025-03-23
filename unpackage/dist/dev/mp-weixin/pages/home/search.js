@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const utils_tool = require("../../utils/tool.js");
 const goodsInfoObj = common_vendor.er.importObject("goodsInfoObj");
 const _sfc_main = {
   data() {
@@ -16,7 +15,6 @@ const _sfc_main = {
     };
   },
   methods: {
-    formatMillisecondsToDate: utils_tool.formatMillisecondsToDate,
     goBack() {
       common_vendor.index.navigateBack();
     },
@@ -45,6 +43,18 @@ const _sfc_main = {
           page: this.page,
           pageSize: this.pageSize
         });
+        if (res.code === -1) {
+          common_vendor.index.showToast({
+            title: "未登录/登录过期",
+            icon: "none"
+          });
+          setTimeout(() => {
+            common_vendor.index.navigateTo({
+              url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
+            });
+          }, 1e3);
+          return;
+        }
         if (this.page === 1) {
           this.goodsList = res.data;
         } else {
@@ -75,12 +85,14 @@ const _sfc_main = {
   }
 };
 if (!Array) {
+  const _easycom_goods_item2 = common_vendor.resolveComponent("goods-item");
   const _easycom_goods_popup2 = common_vendor.resolveComponent("goods-popup");
-  _easycom_goods_popup2();
+  (_easycom_goods_item2 + _easycom_goods_popup2)();
 }
+const _easycom_goods_item = () => "../../components/goods-item/goods-item.js";
 const _easycom_goods_popup = () => "../../components/goods-popup/goods-popup.js";
 if (!Math) {
-  _easycom_goods_popup();
+  (_easycom_goods_item + _easycom_goods_popup)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
@@ -96,12 +108,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $data.goodsList.length > 0 ? common_vendor.e({
     h: common_vendor.f($data.goodsList, (item, k0, i0) => {
       return {
-        a: common_vendor.t(item.goods_name),
-        b: common_vendor.t(item.goods_price),
-        c: common_vendor.t(item.goods_sn),
-        d: common_vendor.t($options.formatMillisecondsToDate(item.last_modify_date)),
-        e: item._id,
-        f: common_vendor.o(($event) => $options.showGoodsDetail(item), item._id)
+        a: "78dc3531-0-" + i0,
+        b: common_vendor.p({
+          item
+        }),
+        c: item._id,
+        d: common_vendor.o(($event) => $options.showGoodsDetail(item), item._id)
       };
     }),
     i: $data.hasMore

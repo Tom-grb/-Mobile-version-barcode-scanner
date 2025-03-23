@@ -28,11 +28,32 @@
 				"navigationBarTitleText": "微信登录"
 			}
 		}, {
-		    "path": "uni_modules/uni-id-pages/pages/common/webview/webview",
-		    "style": {
-		        "enablePullDownRefresh": false,
-		        "navigationBarTitleText": ""
-		    }
+			"path": "uni_modules/uni-id-pages/pages/common/webview/webview",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/list/list",
+			"style": {
+				"navigationBarTitleText": "商品",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "uni_modules/uni-id-pages/pages/common/PrivacyPolicy/PrivacyPolicy",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户服务协议"
+			}
+		},
+		{
+			"path" : "uni_modules/uni-id-pages/pages/common/UserAgreement/UserAgreement",
+			"style" : 
+			{
+				"navigationBarTitleText" : "隐私政策条款"
+			}
 		}
 	],
 	"globalStyle": {
@@ -45,23 +66,32 @@
 		"color": "#9799a5",
 		"selectedColor": "#28B389",
 		"list": [{
-			"text": "首页",
-			"pagePath": "pages/home/home",
-			"iconPath": "static/tabBar/scan.png",
-			"selectedIconPath": "static/tabBar/scan-active.png"
-		}, {
-			"text": "结算",
-			"pagePath": "pages/complate/complate",
-			"iconPath": "static/tabBar/checkout.png",
-			"selectedIconPath": "static/tabBar/checkout-active.png"
-		}, {
-			"text": "我的",
-			"pagePath": "pages/my/my",
-			"iconPath": "static/tabBar/my.png",
-			"selectedIconPath": "static/tabBar/my-active.png"
-		}]
+				"text": "首页",
+				"pagePath": "pages/home/home",
+				"iconPath": "static/tabBar/scan.png",
+				"selectedIconPath": "static/tabBar/scan-active.png"
+			}, {
+				"text": "结算",
+				"pagePath": "pages/complate/complate",
+				"iconPath": "static/tabBar/checkout.png",
+				"selectedIconPath": "static/tabBar/checkout-active.png"
+			},
+			{
+				"text": "商品",
+				"pagePath": "pages/list/list",
+				"iconPath": "static/tabBar/data.png",
+				"selectedIconPath": "/static/tabBar/data-active.png"
+			},
+			{
+				"text": "我的",
+				"pagePath": "pages/my/my",
+				"iconPath": "static/tabBar/my.png",
+				"selectedIconPath": "static/tabBar/my-active.png"
+			}
+		]
 	},
 	"uniIdRouter": {
+		
 	},
 	"subPackages": [{
 		"root": "pages/subpack",

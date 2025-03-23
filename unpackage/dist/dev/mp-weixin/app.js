@@ -8,6 +8,9 @@ if (!Math) {
   "./pages/my/my.js";
   "./uni_modules/uni-id-pages/pages/login/login-withoutpwd.js";
   "./uni_modules/uni-id-pages/pages/common/webview/webview.js";
+  "./pages/list/list.js";
+  "./uni_modules/uni-id-pages/pages/common/PrivacyPolicy/PrivacyPolicy.js";
+  "./uni_modules/uni-id-pages/pages/common/UserAgreement/UserAgreement.js";
   "./pages/subpack/explanation/explanation.js";
 }
 const _sfc_main = {
