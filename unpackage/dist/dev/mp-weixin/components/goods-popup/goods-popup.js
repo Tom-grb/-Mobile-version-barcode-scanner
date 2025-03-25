@@ -46,23 +46,26 @@ const _sfc_main = {
     },
     async handleConfirm() {
       try {
+        if (this.localGoods.goods_name === "") {
+          common_vendor.index.showToast({
+            title: "名称必填",
+            icon: "none"
+          });
+          return;
+        }
         this.localGoods.goods_price = parseFloat(this.localGoods.goods_price);
-        this.localGoods.goods_num = parseFloat(this.localGoods.goods_num);
         if (isNaN(this.localGoods.goods_price) || this.localGoods.goods_price < 0) {
           common_vendor.index.showToast({
-            title: "价格要求为数字且大于0",
+            title: "价格要求为数字且大于等于0",
             icon: "none"
           });
           return;
         }
-        if (isNaN(this.localGoods.goods_num) || this.localGoods.goods_num < 0) {
-          common_vendor.index.showToast({
-            title: "数量要求为数字且大于0",
-            icon: "none"
-          });
-          return;
+        if (this.localGoods.goods_num) {
+          this.localGoods.goods_num = parseFloat(this.localGoods.goods_num);
         }
         const res = await goodsInfoObj.updateGoods(this.localGoods);
+        common_vendor.index.__f__("log", "at components/goods-popup/goods-popup.vue:126", res);
         if (res.code === -1) {
           common_vendor.index.showToast({
             title: "未登录/登录过期",
@@ -76,6 +79,7 @@ const _sfc_main = {
         this.isEditing = false;
         this.$emit("refresh");
       } catch (e) {
+        common_vendor.index.__f__("log", "at components/goods-popup/goods-popup.vue:141", e);
         common_vendor.index.showToast({
           title: "更新失败",
           icon: "error"

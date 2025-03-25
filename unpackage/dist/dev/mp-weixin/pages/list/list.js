@@ -22,7 +22,7 @@ const _sfc_main = {
     this.getGoods();
   },
   onPullDownRefresh() {
-    common_vendor.index.__f__("log", "at pages/list/list.vue:44", 123);
+    common_vendor.index.__f__("log", "at pages/list/list.vue:51", 123);
     this.page = 1;
     this.pageSize = 20;
     this.goodsList = [];
@@ -30,7 +30,7 @@ const _sfc_main = {
     this.getGoods();
   },
   onReachBottom() {
-    common_vendor.index.__f__("log", "at pages/list/list.vue:52", "bottom");
+    common_vendor.index.__f__("log", "at pages/list/list.vue:59", "bottom");
     this.getGoods();
   },
   methods: {
@@ -54,6 +54,8 @@ const _sfc_main = {
           title: "未登录/登录过期",
           icon: "none"
         });
+        this.isLoading = false;
+        common_vendor.index.stopPullDownRefresh();
         setTimeout(() => {
           common_vendor.index.navigateTo({
             url: "/uni_modules/uni-id-pages/pages/login/login-withoutpwd"
@@ -108,10 +110,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     }),
     c: $data.isLoading
-  }, $data.isLoading ? {} : {}) : {}, {
-    d: common_vendor.o(($event) => $data.showPopup = $event),
-    e: common_vendor.o($options.refreshList),
-    f: common_vendor.p({
+  }, $data.isLoading ? {} : {}) : $data.goodsList.length === 0 && $data.isLoading ? {} : $data.goodsList.length === 0 && !$data.isLoading ? {} : {}, {
+    d: $data.goodsList.length === 0 && $data.isLoading,
+    e: $data.goodsList.length === 0 && !$data.isLoading,
+    f: common_vendor.o(($event) => $data.showPopup = $event),
+    g: common_vendor.o($options.refreshList),
+    h: common_vendor.p({
       show: $data.showPopup,
       goods: $data.currentGoods
     })

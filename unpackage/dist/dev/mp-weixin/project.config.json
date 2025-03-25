@@ -11,6 +11,7 @@
     "minified": true,
     "newFeature": true,
     "bigPackageSizeSupport": true,
+    "ignoreUploadUnusedFiles": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -18,7 +19,7 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "3.7.8",
+  "libVersion": "3.7.10",
   "appid": "wxda46dcadca07d370",
   "projectname": "扫一扫",
   "condition": {

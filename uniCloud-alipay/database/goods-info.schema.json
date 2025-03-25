@@ -39,15 +39,15 @@
 		"goods_num": {
 			"bsonType": "double",
 			"description": "商品数量",
-			"title": "名称",
+			"title": "数量",
 			"trim": "both",
 			"minimum": 0 
 		},
 		"goods_price":{
 			"bsonType": "double",
 			"description": "商品价格",
+			"trim": "both",
 			"title": "价格",
-			"defaultValue": 0.0,
 			"minimum": 0 
 		},
 		"goods_notes": {

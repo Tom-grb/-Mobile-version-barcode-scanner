@@ -25,10 +25,11 @@
 						placeholder="请输入商品价格" />
 					<text v-else class="value">￥{{goods.goods_price}}</text>
 				</view>
-				
+
 				<view class="form-item">
 					<text class="label">商品数量</text>
-					<input v-if="isEditing" v-model="localGoods.goods_num" class="input" type="digit" placeholder="请输入商品数量" />
+					<input v-if="isEditing" v-model="localGoods.goods_num" class="input" type="digit"
+						placeholder="请输入商品数量" />
 					<text v-else class="value">{{goods.goods_num || '暂无数量'}}</text>
 				</view>
 
@@ -81,12 +82,12 @@
 			}
 		},
 		methods: {
-			gotoLogin(){
+			gotoLogin() {
 				uni.navigateTo({
 					url: '/uni_modules/uni-id-pages/pages/login/login-withoutpwd'
 				})
 			},
-			
+
 			cancel() {
 				this.isEditing = false
 				this.$emit('update:show', false)
@@ -100,38 +101,44 @@
 			},
 			async handleConfirm() {
 				try {
-					this.localGoods.goods_price = parseFloat(this.localGoods.goods_price)
-					this.localGoods.goods_num = parseFloat(this.localGoods.goods_num)
-					if (isNaN(this.localGoods.goods_price) || this.localGoods.goods_price < 0) {
+					if(this.localGoods.goods_name === ''){
 						uni.showToast({
-							title: '价格要求为数字且大于0',
+							title: '名称必填',
 							icon: 'none'
 						});
 						return
 					}
-					if (isNaN(this.localGoods.goods_num) || this.localGoods.goods_num < 0) {
+					
+					this.localGoods.goods_price = parseFloat(this.localGoods.goods_price)
+					if (isNaN(this.localGoods.goods_price) || this.localGoods.goods_price < 0) {
 						uni.showToast({
-							title: '数量要求为数字且大于0',
+							title: '价格要求为数字且大于等于0',
 							icon: 'none'
 						});
 						return
+					}
+					
+					if(this.localGoods.goods_num){
+						this.localGoods.goods_num = parseFloat(this.localGoods.goods_num)
 					}
 
 					const res = await goodsInfoObj.updateGoods(this.localGoods)
-					if(res.code===-1){
+					console.log(res)
+					if (res.code === -1) {
 						uni.showToast({
 							title: '未登录/登录过期',
-							icon:'none'
+							icon: 'none'
 						})
-						setTimeout(()=>{
+						setTimeout(() => {
 							this.gotoLogin()
-						},1000)
+						}, 1000)
 						return
 					}
 					this.isEditing = false
 					this.$emit('refresh')
 
 				} catch (e) {
+					console.log(e)
 					uni.showToast({
 						title: '更新失败',
 						icon: 'error'
@@ -148,14 +155,14 @@
 								const rescode = await goodsInfoObj.removeGoods({
 									_id: this.goods._id
 								})
-								if(rescode.code===-1){
+								if (rescode.code === -1) {
 									uni.showToast({
 										title: '未登录/登录过期',
-										icon:'none'
+										icon: 'none'
 									})
-									setTimeout(()=>{
+									setTimeout(() => {
 										this.gotoLogin()
-									},1000)
+									}, 1000)
 									return
 								}
 								uni.showToast({
@@ -227,7 +234,7 @@
 	.form-item {
 		margin-bottom: 10rpx;
 	}
-	
+
 
 	.label {
 		font-size: 28rpx;

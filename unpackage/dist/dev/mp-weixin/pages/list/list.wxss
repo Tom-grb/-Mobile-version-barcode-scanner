@@ -36,6 +36,16 @@
   padding: 30rpx 0;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.font {
+  font-size: 38rpx;
+  color: #c7ccd7;
+}
+.empty-icon {
+  width: 500rpx;
+  height: 500rpx;
 }
 .load-more,
 .no-more {

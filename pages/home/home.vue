@@ -38,7 +38,7 @@
 					<input v-model="newGoods.goods_sn" class="add-input" placeholder="商品条形码" />
 					<input v-model="newGoods.goods_name" class="add-input" placeholder="商品名称" />
 					<input v-model="newGoods.goods_price" class="add-input" type="digit" placeholder="商品价格" />
-					<input v-model="newGoods.goods_num" class="add-input" placeholder="商品数量" />
+					<input v-model="newGoods.goods_num" class="add-input" type="digit" placeholder="商品数量" />
 					<input v-model="newGoods.goods_notes" class="add-input" placeholder="商品备注" />
 				</view>
 				<view class="add-footer">
@@ -159,14 +159,27 @@
 
 			async confirmAdd() {
 				try {
-					this.newGoods.goods_price = parseFloat(this.newGoods.goods_price)
-					if (isNaN(this.newGoods.goods_price) || this.newGoods.goods_price < 0) {
+					if(this.newGoods.goods_name === ''){
 						uni.showToast({
-							title: '价格要求为数字且大于0',
+							title: '名称必填',
 							icon: 'none'
 						});
 						return
 					}
+					
+					this.newGoods.goods_price = parseFloat(this.newGoods.goods_price)
+					if (isNaN(this.newGoods.goods_price) || this.newGoods.goods_price < 0) {
+						uni.showToast({
+							title: '价格要求为数字且大于等于0',
+							icon: 'none'
+						});
+						return
+					}
+					
+					if(this.newGoods.goods_num){
+						this.newGoods.goods_num = parseFloat(this.newGoods.goods_num)
+					}
+					
 					const res = await goodsInfoObj.addGoods(this.newGoods)
 					if(res.code===-1){
 						uni.showToast({

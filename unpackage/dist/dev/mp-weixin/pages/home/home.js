@@ -101,13 +101,23 @@ const _sfc_main = {
     },
     async confirmAdd() {
       try {
-        this.newGoods.goods_price = parseFloat(this.newGoods.goods_price);
-        if (isNaN(this.newGoods.goods_price) || this.newGoods.goods_price < 0) {
+        if (this.newGoods.goods_name === "") {
           common_vendor.index.showToast({
-            title: "价格要求为数字且大于0",
+            title: "名称必填",
             icon: "none"
           });
           return;
+        }
+        this.newGoods.goods_price = parseFloat(this.newGoods.goods_price);
+        if (isNaN(this.newGoods.goods_price) || this.newGoods.goods_price < 0) {
+          common_vendor.index.showToast({
+            title: "价格要求为数字且大于等于0",
+            icon: "none"
+          });
+          return;
+        }
+        if (this.newGoods.goods_num) {
+          this.newGoods.goods_num = parseFloat(this.newGoods.goods_num);
         }
         const res = await goodsInfoObj.addGoods(this.newGoods);
         if (res.code === -1) {
