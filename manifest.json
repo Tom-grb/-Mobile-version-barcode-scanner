@@ -56,7 +56,6 @@
 =======
         "appid" : "",
         "appsecret" : "",
->>>>>>> cd1dee4669d7e0ec8f2158ea14094c648766c817
         "setting" : {
             "urlCheck" : false,
             "minified" : true
