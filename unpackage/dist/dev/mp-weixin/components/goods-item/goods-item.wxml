@@ -1,1 +1,0 @@
-<view class="goodsBox data-v-ce82559b"><view class="goods-info data-v-ce82559b"><text class="goods-name data-v-ce82559b">{{a}}</text><text class="goods-price data-v-ce82559b">￥{{b}}</text></view><view class="goods-meta data-v-ce82559b"><text class="goods-code data-v-ce82559b">编码：{{c}}</text><text class="goods-time data-v-ce82559b">{{d}}</text></view></view>
