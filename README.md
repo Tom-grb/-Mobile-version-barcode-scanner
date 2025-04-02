@@ -7,9 +7,40 @@
 - ​**商品管理**：完整的CRUD操作
 
 ## 使用方法
-- 注意开通云服务需使用支付宝，如果开通阿里云的无法导出生成下载地址
-- 导入uni-id-pages,具体操作参考官网 https://doc.dcloud.net.cn/uniCloud/uni-id/summary.html
-- 在文件 manifest.json 添加微信appid
+
+### 环境要求
+
+- Node.js v20.0+
+
+- HBuilderX 4.0+
+
+- 微信开发者工具最新版
+
+- npm 或 yarn 包管理工具
+
+# 开通支付宝云服务
+
+1. 打开uniCloud Web控制台
+
+2. 右击cloudfunctions，上传所有云函数及公共模块
+
+3. 右击database，上传所有DB Schema
+
+# 安装依赖
+
+1. 在项目根目录右击使用命令行窗口打开目录，执行npm install 安装node_modules依赖
+
+# 小程序配置
+
+1. 微信公众平台获取appid
+
+2. 在manifest.json中配置小程序appid
+
+3. 在\uni_modules\uni-config-center\uniCloud\cloudfunctions\common\uni-config-center\uni-id\config.josn配置微信的appid和appsecret
+
+# 运行
+
+1. 在HBuilderX中选择”运行“->"运行到小程序模拟器"
 
 ## 小程序体验入口
 - 名称：我的物品录
